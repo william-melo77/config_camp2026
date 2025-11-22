@@ -47,6 +47,13 @@ const envSchema = z
         // URL pública base opcional para construir enlaces accesibles
         // Ej: https://mi-dominio.com o https://<account-id>.r2.cloudflarestorage.com
         R2_PUBLIC_BASE_URL: z.string().optional(),
+
+        // Configuración de SMTP para envío de correos
+        SMTP_HOST: z.string().default("localhost"),
+        SMTP_PORT: z.string().transform(Number).default(587),
+        SMTP_USER: z.string().optional(),
+        SMTP_PASS: z.string().optional(),
+        SMTP_FROM: z.string().default("noreply@example.com"),
     })
     .superRefine((env, ctx) => {
         // Si R2 está habilitado, exigir endpoint y credenciales
@@ -180,4 +187,19 @@ export const r2Config = {
     enabled: env.R2_ENABLED,
     bucketPublic: env.R2_BUCKET_PUBLIC,
     publicBaseUrl: env.R2_PUBLIC_BASE_URL,
+};
+
+// Configuración de SMTP
+export const smtpConfig = {
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_PORT === 465, // true para puerto 465, false para otros
+    auth:
+        env.SMTP_USER && env.SMTP_PASS
+            ? {
+                  user: env.SMTP_USER,
+                  pass: env.SMTP_PASS,
+              }
+            : undefined,
+    from: env.SMTP_FROM,
 };

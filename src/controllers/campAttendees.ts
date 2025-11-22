@@ -7,6 +7,7 @@ import ResponseHandler from "../utils/responseHandler";
 import CampAttendee from "../models/CampAttendee";
 import Role from "../models/Role";
 import { AppError } from "../utils/handleError";
+import { emailService } from "../services/emailService";
 
 // Extiendo Request localmente para logging consistente
 interface ExtendedRequest extends Request {
@@ -418,6 +419,39 @@ const campAttendeesController = {
             // Actualizar solo los campos necesarios sin afectar otros campos
             await CampAttendee.update(updateData, { where: { id } });
             const updated = await CampAttendee.findOneData(id);
+            
+            // Enviar email de bienvenida si se activa el asistente y tiene email
+            if (isActive && updated?.email) {
+                // Enviar email de forma asíncrona sin bloquear la respuesta
+                emailService.sendWelcomeEmail({
+                    firstName: updated.firstName,
+                    lastName: updated.lastName,
+                    email: updated.email,
+                    identificationNumber: updated.identificationNumber,
+                }).then((emailSent) => {
+                    if (emailSent) {
+                        logger.info("Welcome email sent successfully", {
+                            requestId: req.requestId,
+                            id,
+                            email: updated.email,
+                        });
+                    } else {
+                        logger.warn("Failed to send welcome email", {
+                            requestId: req.requestId,
+                            id,
+                            email: updated.email,
+                        });
+                    }
+                }).catch((error) => {
+                    logger.error("Error sending welcome email", {
+                        requestId: req.requestId,
+                        id,
+                        email: updated.email,
+                        error: error instanceof Error ? error.message : String(error),
+                    });
+                });
+            }
+            
             logger.info("CampAttendee activation updated", {
                 requestId: req.requestId,
                 id,
