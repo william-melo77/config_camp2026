@@ -1,14 +1,14 @@
 import { Router } from "express";
 import campAttendeesController from "../controllers/campAttendees";
 import {
-  validatorCreateCampAttendee,
-  validatorGetCampAttendee,
-  validatorUpdateCampAttendee,
-  validatorQueryCampAttendees,
-  validatorActivationStatus,
-  validatorChangePassword,
-  validatorCheckEmailUnique,
-  validatorCheckIdentificationUnique,
+    validatorCreateCampAttendee,
+    validatorGetCampAttendee,
+    validatorUpdateCampAttendee,
+    validatorQueryCampAttendees,
+    validatorActivationStatus,
+    validatorChangePassword,
+    validatorCheckEmailUnique,
+    validatorCheckIdentificationUnique,
 } from "../validators/campAttendees";
 
 const router = Router();
@@ -335,7 +335,11 @@ const router = Router();
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.get("/", validatorQueryCampAttendees, campAttendeesController.getCampAttendees);
+router.get(
+    "/",
+    validatorQueryCampAttendees,
+    campAttendeesController.getCampAttendees
+);
 
 /**
  * @swagger
@@ -379,9 +383,9 @@ router.get("/", validatorQueryCampAttendees, campAttendeesController.getCampAtte
  *         $ref: '#/components/responses/InternalServerError'
  */
 router.get(
-  "/check-email",
-  validatorCheckEmailUnique,
-  campAttendeesController.checkEmailExists
+    "/check-email",
+    validatorCheckEmailUnique,
+    campAttendeesController.checkEmailExists
 );
 
 /**
@@ -426,9 +430,9 @@ router.get(
  *         $ref: '#/components/responses/InternalServerError'
  */
 router.get(
-  "/check-identification",
-  validatorCheckIdentificationUnique,
-  campAttendeesController.checkIdentificationExists
+    "/check-identification",
+    validatorCheckIdentificationUnique,
+    campAttendeesController.checkIdentificationExists
 );
 
 /**
@@ -471,7 +475,11 @@ router.get(
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.get("/:id", validatorGetCampAttendee, campAttendeesController.getCampAttendee);
+router.get(
+    "/:id",
+    validatorGetCampAttendee,
+    campAttendeesController.getCampAttendee
+);
 
 /**
  * @swagger
@@ -514,7 +522,11 @@ router.get("/:id", validatorGetCampAttendee, campAttendeesController.getCampAtte
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.post("/", validatorCreateCampAttendee, campAttendeesController.createCampAttendee);
+router.post(
+    "/",
+    validatorCreateCampAttendee,
+    campAttendeesController.createCampAttendee
+);
 
 /**
  * @swagger
@@ -567,10 +579,10 @@ router.post("/", validatorCreateCampAttendee, campAttendeesController.createCamp
  *         $ref: '#/components/responses/InternalServerError'
  */
 router.put(
-  "/:id",
-  validatorGetCampAttendee,
-  validatorUpdateCampAttendee,
-  campAttendeesController.updateCampAttendee
+    "/:id",
+    validatorGetCampAttendee,
+    validatorUpdateCampAttendee,
+    campAttendeesController.updateCampAttendee
 );
 
 /**
@@ -578,6 +590,7 @@ router.put(
  * /api/camp-attendees/{id}/activation:
  *   patch:
  *     summary: Activa o desactiva un asistente
+ *     description: Al activar un asistente (isActive=true), también se actualiza automáticamente el campo registrationStatus a CONFIRMED
  *     tags: [CampAttendees]
  *     parameters:
  *       - in: path
@@ -595,6 +608,7 @@ router.put(
  *             properties:
  *               isActive:
  *                 type: boolean
+ *                 description: Si es true, también actualiza registrationStatus a CONFIRMED
  *     responses:
  *       200:
  *         description: Estado de activación actualizado exitosamente
@@ -625,9 +639,9 @@ router.put(
  *         $ref: '#/components/responses/InternalServerError'
  */
 router.patch(
-  "/:id/activation",
-  validatorActivationStatus,
-  campAttendeesController.updateActivationStatus
+    "/:id/activation",
+    validatorActivationStatus,
+    campAttendeesController.updateActivationStatus
 );
 
 /**
@@ -688,9 +702,9 @@ router.patch(
  *         $ref: '#/components/responses/InternalServerError'
  */
 router.post(
-  "/:id/change-password",
-  validatorChangePassword,
-  campAttendeesController.changePassword
+    "/:id/change-password",
+    validatorChangePassword,
+    campAttendeesController.changePassword
 );
 
 /**
@@ -737,6 +751,10 @@ router.post(
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.delete("/:id", validatorGetCampAttendee, campAttendeesController.deleteCampAttendee);
+router.delete(
+    "/:id",
+    validatorGetCampAttendee,
+    campAttendeesController.deleteCampAttendee
+);
 
 export default router;

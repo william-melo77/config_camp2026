@@ -1,11 +1,11 @@
 import { Router } from "express";
 import rolesController from "../controllers/roles";
 import {
-  validatorCreateRole,
-  validatorGetRole,
-  validatorUpdateRole,
-  validatorGetRoleByCode,
-  validatorQueryRoles,
+    validatorCreateRole,
+    validatorGetRole,
+    validatorUpdateRole,
+    validatorGetRoleByCode,
+    validatorQueryRoles,
 } from "../validators/roles";
 
 const router = Router();
@@ -167,7 +167,11 @@ router.get("/:id", validatorGetRole, rolesController.getRole);
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.get("/code/:code", validatorGetRoleByCode, rolesController.getRoleByCode);
+router.get(
+    "/code/:code",
+    validatorGetRoleByCode,
+    rolesController.getRoleByCode
+);
 
 /**
  * @swagger
@@ -278,10 +282,10 @@ router.post("/", validatorCreateRole, rolesController.createRole);
  *         $ref: '#/components/responses/InternalServerError'
  */
 router.put(
-  "/:id",
-  validatorGetRole,
-  validatorUpdateRole,
-  rolesController.updateRole
+    "/:id",
+    validatorGetRole,
+    validatorUpdateRole,
+    rolesController.updateRole
 );
 
 /**
